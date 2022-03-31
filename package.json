@@ -1,0 +1,24 @@
+{
+  "name": "news-api",
+  "version": "1.0.0",
+  "description": "api for admin dashboard of news",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
+  },
+  "author": "ZUNO",
+  "license": "ISC",
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "nodemon": "^2.0.15",
+    "prisma": "^3.11.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.11.1",
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
