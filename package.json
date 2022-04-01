@@ -2,10 +2,11 @@
   "name": "news-api",
   "version": "1.0.0",
   "description": "api for admin dashboard of news",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon NODE_ENV=development src/dev.js",
+    "prod": "nodemon NODE_ENV=production src/index.js"
   },
   "author": "ZUNO",
   "license": "ISC",
