@@ -9,8 +9,9 @@ const authMiddleware = async (req, res, next) => {
         const accessToken = await authHeader.split(" ")[1]
         if (!accessToken) return res.status(403).json(isNotPermission)
         const decoded = jwt.verify(accessToken, process.env.SECRET)
-        
         if (!decoded) return res.status(403).json(isNotPermission)
+        console.log(decoded)
+        // if (decoded.exp > Date().now() + ) return res.status(403).json(isNotPermission)
         
         req.id = decoded.id
         return next()

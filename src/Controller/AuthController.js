@@ -56,15 +56,33 @@ const signInController = async (req, res) => {
         const accessToken = jwt.sign(
             { id: user.id, email: user.email, role: user.role },
             process.env.SECRET,
-            { expiresIn: "10h" }
+            { expiresIn: "1m" }
         )
-        return res.status(200).json({ success: true, accessToken })
+        const refreshToken = jwt.sign(
+            { id: user.id, email: user.email, role: user.role },
+            process.env.SECRET,
+            { expiresIn: "1w" }
+        )
+        return res.status(200).json({
+            success: true,
+            message: `You successfully login by ${user.name}`,
+            accessToken,
+            refreshToken,
+        })
     } catch (error) {
         console.log(error)
     }
 }
 
+const signOutController = async (req, res) => {
+    const { id, email, name, role } = req.body
+    return res.status(200).json({
+        success: true,
+        message: "Sign out successfully!"
+    })
+}
 module.exports = {
     signUpController,
     signInController,
+    signOutController,
 }
