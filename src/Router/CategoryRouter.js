@@ -1,7 +1,11 @@
 const express = require("express")
+const authMiddleware = require("../Middleware/AuthMiddleware")
 
 const categoryRouter = express.Router()
 
-// categoryRouter.post("/category", auth, postCategory)
+const { getCategories, addCategory } = require("../Controller/CategoryController")
+
+categoryRouter.get("/", authMiddleware, getCategories)
+categoryRouter.post("/", authMiddleware, addCategory)
 
 module.exports = categoryRouter

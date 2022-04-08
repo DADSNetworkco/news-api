@@ -12,11 +12,15 @@ const signUpController = async (req, res) => {
 
         if (password !== confirmPassword) return res.status(403)
         const hashedPassword = await bcrypt.hash(password, 10)
+        const refreshToken = jwt.sign({ email }, process.env.SECRET, {
+            expiresIn: "1w",
+        })
         const user = await prisma.user.create({
             data: {
                 email,
                 password: hashedPassword,
                 name,
+                refreshToken,
             },
         })
         return res.status(200).json({
@@ -56,18 +60,13 @@ const signInController = async (req, res) => {
         const accessToken = jwt.sign(
             { id: user.id, email: user.email, role: user.role },
             process.env.SECRET,
-            { expiresIn: "1m" }
-        )
-        const refreshToken = jwt.sign(
-            { id: user.id, email: user.email, role: user.role },
-            process.env.SECRET,
-            { expiresIn: "1w" }
+            { expiresIn: !remember_me ? "3h" : "1w" }
         )
         return res.status(200).json({
             success: true,
             message: `You successfully login by ${user.name}`,
             accessToken,
-            refreshToken,
+            refreshToken: user.refreshToken
         })
     } catch (error) {
         console.log(error)
@@ -78,7 +77,7 @@ const signOutController = async (req, res) => {
     const { id, email, name, role } = req.body
     return res.status(200).json({
         success: true,
-        message: "Sign out successfully!"
+        message: "Sign out successfully!",
     })
 }
 module.exports = {

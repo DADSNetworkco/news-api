@@ -15,8 +15,8 @@ const PostRouter = require("./Router/PostRouter")
 // endpoint
 app.use("/auth", authRouter)
 app.use("/user", userRouter)
-app.use("/category", CategoryRouter)
-app.use("/post", PostRouter)
+app.use("/content/category", CategoryRouter)
+app.use("/content/post", PostRouter)
 
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`)
