@@ -4,7 +4,6 @@ const prisma = new PrismaClient()
 const getPosts = async (req, res) => {
     try {
         const posts = await prisma.post.findMany({
-            where: { published: true },
             include: {
                 category: true,
                 user: {
@@ -39,12 +38,11 @@ const addPost = async (req, res) => {
         const { title, content, categoryId } = parseData
         const { file, id } = req
         if (!file) return res.status(400)
-        console.log({ title, content })
         const post = await prisma.post.create({
             data: {
                 title,
                 content,
-                thumbnail: `${process.env.BASE_URL}/upload/${file.filename}`,
+                thumbnail: `${process.env.BASE_URL}/upload/thumbnail/${file.filename}`,
                 categoryId,
                 authorId: id,
             },
@@ -56,8 +54,39 @@ const addPost = async (req, res) => {
     } catch (error) {}
 }
 
+const publishPost = async (req, res) => {
+    try {
+        const { id, status } = req.body
+        const publishPost = await prisma.post.update({
+            where: { id },
+            data: {
+                published: status === "published" ? false : true,
+            },
+        })
+        return res.status(200).json({
+            success: true,
+            message: `Successfully ${status === "published" ? "unpublish" : "publish"} post!`,
+        })
+    } catch (error) {}
+}
+
+const deletePost = async (req, res) => {
+    try {
+        const { id } = req.body
+        const deletePost = await prisma.post.delete({
+            where: { id },
+        })
+        return res.status(200).json({
+            success: true,
+            message: "Successfully deleted post!",
+        })
+    } catch (error) {}
+}
+
 module.exports = {
     getPosts,
     getPost,
     addPost,
+    publishPost,
+    deletePost,
 }

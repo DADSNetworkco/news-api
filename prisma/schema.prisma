@@ -41,7 +41,7 @@ model Post {
     content    String     @db.LongText
     thumbnail  String     @db.VarChar(255)
     published  Boolean    @default(false)
-    categoryId   Int
+    categoryId Int
     authorId   Int
     category Category @relation(fields: [categoryId], references: [id])
     user User @relation(fields: [authorId], references: [id])
