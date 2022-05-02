@@ -12,16 +12,22 @@ const storageThumb = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         // tạo tên file = thời gian hiện tại nối với số ngẫu nhiên => tên file chắc chắn không bị trùng
-        const filename = Date.now() + "-" + Math.round(Math.random() * 1e9)
+        const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}`
         cb(null, `${filename}-${file.originalname}`)
     },
 })
 //Khởi tạo middleware với cấu hình trên, lưu trên local của server khi dùng multer
-const uploadThumb = multer({ storageThumb })
+const uploadThumb = multer({ storage: storageThumb, limits: { fileSize: 1024 * 1024 } })
 
-const { getPosts, addPost, getPost, publishPost, deletePost } = require("../Controller/PostController")
+const {
+    getPosts,
+    addPost,
+    getPost,
+    publishPost,
+    deletePost,
+} = require("../Controller/PostController")
 
-// Admin 
+// Admin
 postRouter.get("/", authMiddleware, getPosts)
 postRouter.get("/:postId", authMiddleware, getPost)
 postRouter.post("/publish", authMiddleware, publishPost)

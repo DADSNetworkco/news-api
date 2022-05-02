@@ -11,7 +11,6 @@ const getPosts = async (req, res) => {
                 },
             },
         })
-        console.log(posts)
         return res.status(200).json({
             success: true,
             data: posts,
@@ -38,6 +37,7 @@ const addPost = async (req, res) => {
         const { title, content, categoryId } = parseData
         const { file, id } = req
         if (!file) return res.status(400)
+        console.log(file)
         const post = await prisma.post.create({
             data: {
                 title,
