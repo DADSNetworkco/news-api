@@ -19,13 +19,17 @@ const getPosts = async (req, res) => {
 }
 
 const getPost = async (req, res) => {
+    const { postId } = req.params
     try {
-        const posts = await prisma.post.findFirst({
-            where: { published: true },
+        const post = await prisma.post.findFirst({
+            where: { id: parseInt(postId) },
+            include: {
+                category: true,
+            },
         })
         return res.status(200).json({
             success: true,
-            data: posts,
+            data: post,
         })
     } catch (error) {}
 }
@@ -50,6 +54,47 @@ const addPost = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Create new Post successfully!",
+        })
+    } catch (error) {}
+}
+
+const updatePost = async (req, res) => {
+    const { postId } = req.params
+    try {
+        const { data } = req.body
+        const parseData = await JSON.parse(data)
+        const { title, content, categoryId } = parseData
+        const { file, id } = req
+        if (!file) {
+            await prisma.post.update({
+                where: {
+                    id: parseInt(postId),
+                },
+                data: {
+                    title,
+                    content,
+                    categoryId,
+                    authorId: id,
+                },
+            })
+        } else {
+            await prisma.post.update({
+                where: {
+                    id: parseInt(postId),
+                },
+                data: {
+                    title,
+                    content,
+                    thumbnail: `${process.env.BASE_URL}/upload/thumbnail/${file.filename}`,
+                    categoryId,
+                    authorId: id,
+                },
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Update Post successfully!",
         })
     } catch (error) {}
 }
@@ -87,6 +132,7 @@ module.exports = {
     getPosts,
     getPost,
     addPost,
+    updatePost,
     publishPost,
     deletePost,
 }

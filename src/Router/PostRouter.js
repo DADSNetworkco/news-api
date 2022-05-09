@@ -22,6 +22,7 @@ const uploadThumb = multer({ storage: storageThumb, limits: { fileSize: 1024 * 1
 const {
     getPosts,
     addPost,
+    updatePost,
     getPost,
     publishPost,
     deletePost,
@@ -29,10 +30,11 @@ const {
 
 // Admin
 postRouter.get("/", authMiddleware, getPosts)
+postRouter.post("/", [authMiddleware, uploadThumb.single("thumb")], addPost)
+postRouter.put("/:postId", [authMiddleware, uploadThumb.single("thumb")], updatePost)
+postRouter.delete("/", authMiddleware, deletePost)
 postRouter.get("/:postId", authMiddleware, getPost)
 postRouter.post("/publish", authMiddleware, publishPost)
-postRouter.delete("/", authMiddleware, deletePost)
-postRouter.post("/", [authMiddleware, uploadThumb.single("thumb")], addPost)
 
 // Public API
 
