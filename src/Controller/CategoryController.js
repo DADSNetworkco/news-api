@@ -15,6 +15,18 @@ const getCategories = async (req, res) => {
     }
 }
 
+// const getPostsByCategoryId = async (req, res) => {
+//     try {
+//         const postsByCategoryId = await prisma.post.findMany({
+//             where: {
+//                 id:
+//             }
+//         })
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
+
 const addCategory = async (req, res) => {
     try {
         const { id } = req

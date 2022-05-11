@@ -34,6 +34,22 @@ const getPost = async (req, res) => {
     } catch (error) {}
 }
 
+const getPostsByCategoryId = async (req, res) => {
+    const { cateId } = req.params
+    try {
+        const postsByCategoryId = await prisma.post.findMany({
+            where: {
+                published: true,
+                categoryId: parseInt(cateId),
+            },
+        })
+        return res.status(200).json({
+            success: true,
+            data: postsByCategoryId,
+        })
+    } catch (error) {}
+}
+
 const addPost = async (req, res) => {
     try {
         const { data } = req.body
@@ -131,6 +147,7 @@ const deletePost = async (req, res) => {
 module.exports = {
     getPosts,
     getPost,
+    getPostsByCategoryId,
     addPost,
     updatePost,
     publishPost,
